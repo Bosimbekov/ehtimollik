@@ -1,0 +1,1233 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ehtimollar Nazariyasi — Amaliy Mashg'ulot</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0f172a;
+    --bg2: #1e293b;
+    --bg3: #334155;
+    --accent1: #38bdf8;
+    --accent2: #fb923c;
+    --accent3: #a78bfa;
+    --accent4: #34d399;
+    --text: #f1f5f9;
+    --text2: #94a3b8;
+    --card: #1e293b;
+    --border: #334155;
+    --correct: #22c55e;
+    --wrong: #ef4444;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* HEADER */
+  header {
+    background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 50%, #0f172a 100%);
+    padding: 60px 20px 50px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    border-bottom: 2px solid var(--accent1);
+  }
+  header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 50% 0%, rgba(56,189,248,0.15) 0%, transparent 70%);
+  }
+  .header-badge {
+    display: inline-block;
+    background: rgba(56,189,248,0.15);
+    border: 1px solid var(--accent1);
+    color: var(--accent1);
+    padding: 6px 18px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+  header h1 {
+    font-size: clamp(28px, 5vw, 52px);
+    font-weight: 900;
+    background: linear-gradient(135deg, #38bdf8, #a78bfa, #fb923c);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 14px;
+    line-height: 1.2;
+    position: relative;
+  }
+  header p {
+    font-size: 16px;
+    color: var(--text2);
+    max-width: 600px;
+    margin: 0 auto;
+    position: relative;
+  }
+  .floating-shapes span {
+    position: absolute;
+    font-size: 40px;
+    opacity: 0.08;
+    animation: float 6s ease-in-out infinite;
+  }
+  .floating-shapes span:nth-child(1) { top: 10%; left: 5%; animation-delay: 0s; }
+  .floating-shapes span:nth-child(2) { top: 20%; right: 8%; animation-delay: 1s; }
+  .floating-shapes span:nth-child(3) { bottom: 15%; left: 12%; animation-delay: 2s; }
+  .floating-shapes span:nth-child(4) { bottom: 20%; right: 5%; animation-delay: 3s; }
+  @keyframes float {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-15px) rotate(10deg); }
+  }
+
+  /* NAV */
+  nav {
+    background: var(--bg2);
+    border-bottom: 1px solid var(--border);
+    padding: 0 20px;
+    display: flex;
+    justify-content: center;
+    gap: 0;
+    overflow-x: auto;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  nav button {
+    background: none;
+    border: none;
+    color: var(--text2);
+    padding: 16px 22px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+  nav button:hover { color: var(--text); border-bottom-color: var(--border); }
+  nav button.active { color: var(--accent1); border-bottom-color: var(--accent1); }
+
+  /* CONTENT */
+  .container { max-width: 900px; margin: 0 auto; padding: 40px 20px; }
+
+  .section { display: none; }
+  .section.active { display: block; animation: fadeIn 0.4s ease; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* CARDS */
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 28px;
+    margin-bottom: 24px;
+    position: relative;
+    overflow: hidden;
+  }
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent1), var(--accent3));
+  }
+  .card.orange::before { background: linear-gradient(90deg, var(--accent2), #fbbf24); }
+  .card.green::before { background: linear-gradient(90deg, var(--accent4), #86efac); }
+  .card.purple::before { background: linear-gradient(90deg, var(--accent3), #c4b5fd); }
+
+  .card-title {
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--accent1);
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .card.orange .card-title { color: var(--accent2); }
+  .card.green .card-title { color: var(--accent4); }
+  .card.purple .card-title { color: var(--accent3); }
+
+  p { color: var(--text); line-height: 1.7; margin-bottom: 10px; font-size: 15px; }
+
+  /* FORMULA */
+  .formula-box {
+    background: rgba(56,189,248,0.08);
+    border: 1px solid rgba(56,189,248,0.3);
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin: 16px 0;
+    text-align: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--accent1);
+    letter-spacing: 1px;
+  }
+  .formula-box.orange { background: rgba(251,146,60,0.08); border-color: rgba(251,146,60,0.3); color: var(--accent2); }
+  .formula-box.green { background: rgba(52,211,153,0.08); border-color: rgba(52,211,153,0.3); color: var(--accent4); }
+  .formula-box.purple { background: rgba(167,139,250,0.08); border-color: rgba(167,139,250,0.3); color: var(--accent3); }
+
+  /* TABLE */
+  table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 14px; }
+  th { background: rgba(56,189,248,0.15); color: var(--accent1); padding: 12px 14px; text-align: left; font-weight: 700; }
+  td { padding: 10px 14px; border-bottom: 1px solid var(--border); color: var(--text); }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: rgba(255,255,255,0.03); }
+
+  /* STEP CARDS */
+  .steps { display: grid; gap: 12px; margin: 16px 0; }
+  .step {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 18px;
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+  }
+  .step-num {
+    width: 32px; height: 32px;
+    background: linear-gradient(135deg, var(--accent1), var(--accent3));
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 900; font-size: 14px;
+    color: var(--bg);
+    flex-shrink: 0;
+  }
+  .step-content { flex: 1; }
+  .step-title { font-weight: 800; font-size: 14px; color: var(--accent1); margin-bottom: 4px; }
+  .step-text { font-size: 14px; color: var(--text2); line-height: 1.5; }
+
+  /* INTERACTIVE DEMOS */
+  .demo-area {
+    background: rgba(255,255,255,0.02);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    margin: 20px 0;
+  }
+  .demo-title { font-weight: 800; font-size: 16px; color: var(--text); margin-bottom: 16px; }
+
+  /* DICE */
+  .dice-container { display: flex; gap: 16px; align-items: center; flex-wrap: wrap; margin: 10px 0; }
+  .dice {
+    width: 64px; height: 64px;
+    background: white;
+    border-radius: 12px;
+    display: grid;
+    place-items: center;
+    font-size: 28px;
+    cursor: pointer;
+    transition: transform 0.1s;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+    user-select: none;
+  }
+  .dice:hover { transform: scale(1.05); }
+  .dice.rolling { animation: roll 0.5s ease; }
+  @keyframes roll {
+    0% { transform: rotate(0deg) scale(1); }
+    25% { transform: rotate(90deg) scale(0.9); }
+    50% { transform: rotate(180deg) scale(1.1); }
+    75% { transform: rotate(270deg) scale(0.9); }
+    100% { transform: rotate(360deg) scale(1); }
+  }
+
+  /* COIN */
+  .coin {
+    width: 70px; height: 70px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 26px;
+    cursor: pointer;
+    font-weight: 900;
+    transition: transform 0.2s;
+    user-select: none;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+  }
+  .coin.gul { background: linear-gradient(135deg, #fbbf24, #f59e0b); color: #78350f; }
+  .coin.raqam { background: linear-gradient(135deg, #94a3b8, #64748b); color: white; }
+  .coin:hover { transform: scale(1.08); }
+  .coin.flipping { animation: flip 0.6s ease; }
+  @keyframes flip { 0%,100%{transform:scaleY(1)} 50%{transform:scaleY(-1)} }
+
+  /* BTN */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: linear-gradient(135deg, var(--accent1), var(--accent3));
+    color: var(--bg);
+    padding: 12px 24px;
+    border-radius: 10px;
+    border: none;
+    font-family: 'Nunito', sans-serif;
+    font-size: 14px;
+    font-weight: 800;
+    cursor: pointer;
+    transition: transform 0.1s, box-shadow 0.2s;
+    box-shadow: 0 4px 12px rgba(56,189,248,0.3);
+  }
+  .btn:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(56,189,248,0.4); }
+  .btn:active { transform: translateY(0); }
+  .btn.orange { background: linear-gradient(135deg, var(--accent2), #fbbf24); box-shadow: 0 4px 12px rgba(251,146,60,0.3); }
+  .btn.green { background: linear-gradient(135deg, var(--accent4), #86efac); box-shadow: 0 4px 12px rgba(52,211,153,0.3); }
+  .btn.purple { background: linear-gradient(135deg, var(--accent3), #c4b5fd); box-shadow: 0 4px 12px rgba(167,139,250,0.3); }
+
+  /* STATS */
+  .stat-row { display: flex; gap: 12px; flex-wrap: wrap; margin: 12px 0; }
+  .stat {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 12px 18px;
+    flex: 1;
+    min-width: 120px;
+    text-align: center;
+  }
+  .stat-val { font-size: 24px; font-weight: 900; color: var(--accent1); font-family: 'JetBrains Mono'; }
+  .stat-label { font-size: 12px; color: var(--text2); margin-top: 4px; font-weight: 600; }
+
+  /* PROBABILITY BAR */
+  .prob-bar-wrap { margin: 12px 0; }
+  .prob-bar-label { display: flex; justify-content: space-between; font-size: 13px; color: var(--text2); margin-bottom: 6px; font-weight: 700; }
+  .prob-bar-bg { background: var(--bg3); border-radius: 6px; height: 14px; overflow: hidden; }
+  .prob-bar-fill {
+    height: 100%;
+    border-radius: 6px;
+    background: linear-gradient(90deg, var(--accent1), var(--accent3));
+    transition: width 0.5s ease;
+  }
+
+  /* QUIZ */
+  .quiz-q { font-size: 16px; font-weight: 700; color: var(--text); margin-bottom: 16px; line-height: 1.5; }
+  .quiz-options { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
+  .quiz-opt {
+    background: rgba(255,255,255,0.04);
+    border: 2px solid var(--border);
+    border-radius: 10px;
+    padding: 12px 16px;
+    cursor: pointer;
+    font-family: 'Nunito', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text);
+    transition: all 0.2s;
+    text-align: left;
+  }
+  .quiz-opt:hover:not(:disabled) { border-color: var(--accent1); background: rgba(56,189,248,0.08); }
+  .quiz-opt.correct { border-color: var(--correct); background: rgba(34,197,94,0.1); color: var(--correct); }
+  .quiz-opt.wrong { border-color: var(--wrong); background: rgba(239,68,68,0.1); color: var(--wrong); }
+  .quiz-opt:disabled { cursor: not-allowed; }
+  .quiz-feedback { padding: 12px 16px; border-radius: 10px; font-weight: 700; font-size: 14px; margin-bottom: 12px; }
+  .quiz-feedback.correct { background: rgba(34,197,94,0.1); border: 1px solid var(--correct); color: var(--correct); }
+  .quiz-feedback.wrong { background: rgba(239,68,68,0.1); border: 1px solid var(--wrong); color: var(--wrong); }
+  .quiz-progress { display: flex; gap: 6px; margin-bottom: 20px; }
+  .qp-dot {
+    width: 28px; height: 8px;
+    border-radius: 4px;
+    background: var(--bg3);
+    transition: background 0.3s;
+  }
+  .qp-dot.done { background: var(--correct); }
+  .qp-dot.wrong { background: var(--wrong); }
+  .qp-dot.current { background: var(--accent1); }
+
+  /* RESULT */
+  .result-box {
+    text-align: center;
+    padding: 40px 20px;
+  }
+  .result-score { font-size: 72px; font-weight: 900; font-family: 'JetBrains Mono'; }
+  .result-score.great { color: var(--correct); }
+  .result-score.ok { color: var(--accent2); }
+  .result-score.bad { color: var(--wrong); }
+
+  /* SECTION HEADER */
+  .section-header { text-align: center; margin-bottom: 36px; }
+  .section-header h2 { font-size: 30px; font-weight: 900; margin-bottom: 8px; }
+  .section-header p { color: var(--text2); font-size: 15px; }
+  .tag {
+    display: inline-block;
+    background: rgba(56,189,248,0.12);
+    border: 1px solid rgba(56,189,248,0.3);
+    color: var(--accent1);
+    padding: 3px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    letter-spacing: 1px;
+  }
+
+  /* HIGHLIGHT */
+  .highlight { color: var(--accent1); font-weight: 800; }
+  .highlight.orange { color: var(--accent2); }
+  .highlight.green { color: var(--accent4); }
+  .highlight.purple { color: var(--accent3); }
+
+  /* GRID */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  @media(max-width: 600px) { .grid-2 { grid-template-columns: 1fr; } .quiz-options { grid-template-columns: 1fr; } }
+
+  /* BALLS */
+  .balls-container { display: flex; gap: 8px; flex-wrap: wrap; margin: 12px 0; }
+  .ball {
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 800;
+    cursor: pointer;
+    transition: transform 0.2s;
+    user-select: none;
+  }
+  .ball:hover { transform: scale(1.2); }
+  .ball.red { background: linear-gradient(135deg, #ef4444, #b91c1c); color: white; }
+  .ball.blue { background: linear-gradient(135deg, #3b82f6, #1d4ed8); color: white; }
+  .ball.selected { box-shadow: 0 0 0 3px white; }
+
+  /* INPUT */
+  .calc-input {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 16px;
+    color: var(--text);
+    width: 100px;
+  }
+  .calc-input:focus { outline: none; border-color: var(--accent1); }
+  label { font-size: 13px; color: var(--text2); font-weight: 700; margin-bottom: 6px; display: block; }
+
+  /* SLIDER */
+  input[type=range] {
+    width: 100%;
+    accent-color: var(--accent1);
+    height: 6px;
+    margin: 10px 0;
+  }
+
+  /* NOTIFICATION */
+  .notif {
+    position: fixed;
+    top: 80px; right: 20px;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 20px;
+    font-size: 14px;
+    font-weight: 700;
+    opacity: 0;
+    transform: translateX(100px);
+    transition: all 0.3s;
+    z-index: 999;
+    max-width: 280px;
+  }
+  .notif.show { opacity: 1; transform: translateX(0); }
+  .notif.correct { border-color: var(--correct); color: var(--correct); }
+  .notif.wrong { border-color: var(--wrong); color: var(--wrong); }
+
+  /* FOOTER */
+  footer {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--text2);
+    font-size: 13px;
+    border-top: 1px solid var(--border);
+    margin-top: 40px;
+  }
+  footer strong { color: var(--accent1); }
+
+  /* PROGRESS TRACKER */
+  .progress-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 20px;
+    margin-bottom: 30px;
+  }
+  .progress-icon { font-size: 24px; }
+  .progress-text { flex: 1; }
+  .progress-text div:first-child { font-size: 13px; color: var(--text2); font-weight: 700; }
+  .progress-text div:last-child { font-size: 15px; font-weight: 800; color: var(--accent1); }
+
+  /* VENN */
+  .venn svg { overflow: visible; }
+</style>
+</head>
+<body>
+
+<div id="notif" class="notif"></div>
+
+<header>
+  <div class="floating-shapes">
+    <span>🎲</span><span>🪙</span><span>🎯</span><span>📊</span>
+  </div>
+  <div class="header-badge">🎓 9—11 SINF · MATEMATIKA</div>
+  <h1>Ehtimollar Nazariyasi</h1>
+  <p>Interaktiv amaliy mashg'ulot — o'yin orqali o'rgan, sinab ko'r, bilimingni tekshir!</p>
+</header>
+
+<nav>
+  <button class="active" onclick="showSection('bob1',this)">📖 I-BOB</button>
+  <button onclick="showSection('bob2',this)">🎲 II-BOB</button>
+  <button onclick="showSection('bob3',this)">🧮 III-BOB</button>
+  <button onclick="showSection('amaliy',this)">🎯 Amaliy</button>
+  <button onclick="showSection('test',this)">✅ TEST</button>
+</nav>
+
+<!-- ==================== BOB 1 ==================== -->
+<section id="bob1" class="section active">
+<div class="container">
+  <div class="section-header">
+    <span class="tag">I - BOB</span>
+    <h2>Ehtimollikning Asosiy Tushunchalari</h2>
+    <p>Tasodifiy tajriba, hodisa turlari va hodisalar ustidagi amallar</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🎲 Tasodifiy Tajriba va Hodisa</div>
+    <p><span class="highlight">Tasodifiy hodisa</span> — tajriba natijasida ro'y berishi ham, bermasligi ham mumkin bo'lgan hodisadir.</p>
+    <p><span class="highlight">Muqarrar hodisa (U)</span> — har gal albatta ro'y beradigan hodisa. Ehtimolligi: <strong>P(U) = 1</strong></p>
+    <p><span class="highlight orange">Mumkin bo'lmagan hodisa (∅)</span> — hech qachon ro'y bermaydigan hodisa. Ehtimolligi: <strong>P(∅) = 0</strong></p>
+    <div class="formula-box">0 ≤ P(A) ≤ 1</div>
+    <p style="text-align:center;color:var(--text2);font-size:13px;">Har qanday hodisaning ehtimolligi 0 dan 1 gacha bo'ladi</p>
+  </div>
+
+  <div class="card orange">
+    <div class="card-title">🎰 Hodisa Turlari — Kubik Misoli</div>
+    <p>Kubikni tashlaganda 1 dan 6 gacha son tushadi. Quyidagi hodisalarni ko'ring:</p>
+    <table>
+      <tr><th>Hodisa</th><th>Shart</th><th>Turi</th><th>Ehtimollik</th></tr>
+      <tr><td>7 dan kichik son</td><td>1,2,3,4,5,6 — barchasi 7 dan kichik</td><td>🟢 Muqarrar</td><td><span class="highlight green">P = 1</span></td></tr>
+      <tr><td>6 dan katta son</td><td>Kubikda bunday son yo'q</td><td>🔴 Mumkin emas</td><td><span style="color:var(--wrong)">P = 0</span></td></tr>
+      <tr><td>Juft son tushishi</td><td>{2, 4, 6} — 3 ta qulay holat</td><td>🟡 Tasodifiy</td><td><span class="highlight">P = 3/6 = 0.5</span></td></tr>
+    </table>
+  </div>
+
+  <div class="card green">
+    <div class="card-title">🔗 Hodisalar Ustida Amallar</div>
+    <div class="grid-2">
+      <div style="background:rgba(52,211,153,0.06);border:1px solid rgba(52,211,153,0.2);border-radius:10px;padding:16px;">
+        <div style="font-weight:800;color:var(--accent4);margin-bottom:8px;">🔵 Yig'indi (A∪B)</div>
+        <p style="font-size:13px;">A yoki B hodisalardan <strong>kamida bittasi</strong> ro'y berishi</p>
+        <div class="formula-box green" style="font-size:14px;margin:8px 0;">P(A∪B) = P(A) + P(B) - P(A∩B)</div>
+      </div>
+      <div style="background:rgba(167,139,250,0.06);border:1px solid rgba(167,139,250,0.2);border-radius:10px;padding:16px;">
+        <div style="font-weight:800;color:var(--accent3);margin-bottom:8px;">🟣 Ko'paytma (A∩B)</div>
+        <p style="font-size:13px;">A va B hodisalar <strong>bir vaqtda</strong> ro'y berishi</p>
+        <div class="formula-box purple" style="font-size:14px;margin:8px 0;">P(A∩B) = P(A) × P(B)</div>
+      </div>
+    </div>
+    <div style="background:rgba(56,189,248,0.06);border:1px solid rgba(56,189,248,0.2);border-radius:10px;padding:16px;margin-top:12px;">
+      <div style="font-weight:800;color:var(--accent1);margin-bottom:8px;">🔴 Qarama-qarshi Hodisa (Ā)</div>
+      <p style="font-size:13px;">A hodisaning <strong>ro'y bermasligi</strong></p>
+      <div class="formula-box" style="font-size:14px;margin:8px 0;">P(Ā) = 1 - P(A)</div>
+    </div>
+  </div>
+
+  <!-- Interactive Venn -->
+  <div class="card purple">
+    <div class="card-title">🔵 Interaktiv Venn Diagrammasi</div>
+    <p>Kubik tashlaganda A = {juft sonlar} va B = {5 raqami} hodisalari:</p>
+    <div style="text-align:center;margin:20px 0;">
+      <svg width="320" height="200" viewBox="0 0 320 200">
+        <!-- Background -->
+        <rect x="10" y="10" width="300" height="180" rx="12" fill="rgba(255,255,255,0.02)" stroke="#334155"/>
+        <!-- Circles -->
+        <circle cx="130" cy="100" r="70" fill="rgba(56,189,248,0.15)" stroke="#38bdf8" stroke-width="2"/>
+        <circle cx="200" cy="100" r="50" fill="rgba(167,139,250,0.15)" stroke="#a78bfa" stroke-width="2"/>
+        <!-- Labels -->
+        <text x="90" y="85" fill="#38bdf8" font-weight="bold" font-size="13" font-family="Nunito">A</text>
+        <text x="75" y="105" fill="white" font-size="11" font-family="JetBrains Mono">{2, 4, 6}</text>
+        <text x="195" y="85" fill="#a78bfa" font-weight="bold" font-size="13" font-family="Nunito">B</text>
+        <text x="190" y="105" fill="white" font-size="11" font-family="JetBrains Mono">{5}</text>
+        <!-- AUB label -->
+        <text x="100" y="175" fill="#94a3b8" font-size="11" font-family="Nunito">A∪B = {2, 4, 5, 6}</text>
+        <text x="60" y="38" fill="#94a3b8" font-size="11" font-family="Nunito">P(A∪B) = 4/6 = 2/3 ≈ 0.67</text>
+      </svg>
+    </div>
+    <div class="formula-box purple">P(A∪B) = P(A) + P(B) = 3/6 + 1/6 = 4/6 = 2/3</div>
+  </div>
+
+  <!-- Polya Steps -->
+  <div class="card">
+    <div class="card-title">📋 Polya Metodi — 4 Bosqich</div>
+    <p style="margin-bottom:16px;">Har qanday masalani shu 4 bosqich bilan yeching:</p>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-content">
+          <div class="step-title">Masalani tushunish</div>
+          <div class="step-text">Nima berilgan? Nima topish kerak? Shart va talabni aniqlab oling.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-content">
+          <div class="step-title">Reja tuzish</div>
+          <div class="step-text">Qaysi formuladan foydalanamiz? Yechish usulini tanlang.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-content">
+          <div class="step-title">Rejani bajarish</div>
+          <div class="step-text">Formulani qo'llang, hisoblashlarni bajaring.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-content">
+          <div class="step-title">Javobni tekshirish</div>
+          <div class="step-text">Natija 0 ≤ P ≤ 1 shartini qanoatlantiradi? Mantiqan to'g'rimi?</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</section>
+
+<!-- ==================== BOB 2 ==================== -->
+<section id="bob2" class="section">
+<div class="container">
+  <div class="section-header">
+    <span class="tag">II - BOB</span>
+    <h2>Tasodifiy Hodisalar va Ehtimollik</h2>
+    <p>Klassik ta'rif, ehtimollik xossalari, geometrik ehtimollik</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title">📐 Klassik Ehtimollik Ta'rifi</div>
+    <div class="formula-box">P(A) = m / n</div>
+    <p>Bu yerda: <span class="highlight">m</span> — qulay hollar soni, <span class="highlight">n</span> — barcha mumkin bo'lgan hollar soni</p>
+    <table style="margin-top:16px;">
+      <tr><th>Xossa</th><th>Formula</th><th>Ma'nosi</th></tr>
+      <tr><td>Ehtimollik chegarasi</td><td><span class="highlight">0 ≤ P(A) ≤ 1</span></td><td>Har qanday hodisa</td></tr>
+      <tr><td>Muqarrar hodisa</td><td><span class="highlight green">P(U) = 1</span></td><td>Albatta ro'y beradi</td></tr>
+      <tr><td>Mumkin bo'lmagan</td><td><span style="color:var(--wrong)">P(∅) = 0</span></td><td>Hech qachon ro'y bermaydi</td></tr>
+      <tr><td>Qarama-qarshi</td><td><span class="highlight purple">P(Ā) = 1 - P(A)</span></td><td>A ro'y bermasligi</td></tr>
+    </table>
+  </div>
+
+  <!-- Interactive Dice -->
+  <div class="card orange">
+    <div class="card-title">🎲 Interaktiv Kubik — Bosing!</div>
+    <p>Kubikni bosib, ehtimollikni haqiqiy kuzatuvda ko'ring:</p>
+    <div class="demo-area">
+      <div style="display:flex;align-items:center;gap:20px;flex-wrap:wrap;">
+        <div class="dice" id="diceEl" onclick="rollDice()">⚀</div>
+        <div>
+          <div id="diceResult" style="font-size:20px;font-weight:800;color:var(--accent1);">Kubikni bosing!</div>
+          <div id="diceInfo" style="font-size:13px;color:var(--text2);margin-top:4px;"></div>
+        </div>
+      </div>
+      <div class="stat-row" style="margin-top:16px;">
+        <div class="stat"><div class="stat-val" id="diceTotal">0</div><div class="stat-label">Jami urinish</div></div>
+        <div class="stat"><div class="stat-val" id="diceJuft">0</div><div class="stat-label">Juft son</div></div>
+        <div class="stat"><div class="stat-val" id="diceFreq">—</div><div class="stat-label">Juft chastota</div></div>
+      </div>
+      <div class="prob-bar-wrap" style="margin-top:8px;">
+        <div class="prob-bar-label"><span>Juft son nisbiy chastotasi</span><span id="diceBar">0%</span></div>
+        <div class="prob-bar-bg"><div class="prob-bar-fill" id="diceBarFill" style="width:0%"></div></div>
+      </div>
+      <div style="text-align:center;margin-top:4px;font-size:12px;color:var(--text2);">Nazariy: 50% → Ko'proq tashlasangiz shu raqamga yaqinlashadi!</div>
+      <button class="btn orange" style="margin-top:16px;" onclick="rollDice10()">🎲 10 marta tashlash</button>
+      <button class="btn" style="margin-top:16px;margin-left:10px;" onclick="resetDice()">🔄 Qayta boshlash</button>
+    </div>
+  </div>
+
+  <!-- Interactive Coin -->
+  <div class="card green">
+    <div class="card-title">🪙 Interaktiv Tanga</div>
+    <div class="demo-area">
+      <div style="display:flex;align-items:center;gap:20px;flex-wrap:wrap;">
+        <div class="coin gul" id="coinEl" onclick="flipCoin()">🌸<br><small>GUL</small></div>
+        <div>
+          <div id="coinResult" style="font-size:18px;font-weight:800;color:var(--accent4);">Tangani bosing!</div>
+          <div id="coinInfo" style="font-size:13px;color:var(--text2);margin-top:4px;"></div>
+        </div>
+      </div>
+      <div class="stat-row" style="margin-top:16px;">
+        <div class="stat"><div class="stat-val" id="coinTotal">0</div><div class="stat-label">Jami</div></div>
+        <div class="stat"><div class="stat-val" id="coinGul">0</div><div class="stat-label">🌸 Gul</div></div>
+        <div class="stat"><div class="stat-val" id="coinRaqam">0</div><div class="stat-label">🔢 Raqam</div></div>
+      </div>
+      <div class="prob-bar-wrap" style="margin-top:8px;">
+        <div class="prob-bar-label"><span>Gul tushish nisbiy chastotasi</span><span id="coinBar">0%</span></div>
+        <div class="prob-bar-bg"><div class="prob-bar-fill" style="background:linear-gradient(90deg,var(--accent4),#86efac);" id="coinBarFill" style="width:0%"></div></div>
+      </div>
+      <button class="btn green" style="margin-top:16px;" onclick="flipCoin20()">🪙 20 marta tashlash</button>
+      <button class="btn" style="margin-top:16px;margin-left:10px;" onclick="resetCoin()">🔄 Qayta boshlash</button>
+    </div>
+  </div>
+
+  <!-- Geometrik ehtimollik -->
+  <div class="card purple">
+    <div class="card-title">📏 Geometrik Ehtimollik</div>
+    <p>Natijalar soni cheksiz bo'lganda qo'llaniladi:</p>
+    <div class="formula-box purple">P(A) = qulay soha / umumiy soha</div>
+    <div class="demo-area" style="margin-top:16px;">
+      <div class="demo-title">Avtobus misoli — O'zingizhisoblang</div>
+      <p style="font-size:14px;color:var(--text2);">Avtobuslar qancha daqiqada bir keladi?</p>
+      <div style="display:flex;gap:16px;align-items:center;flex-wrap:wrap;margin:12px 0;">
+        <div>
+          <label>Avtobus intervali (daqiqa)</label>
+          <input type="range" id="busInterval" min="5" max="30" value="15" oninput="updateBus()">
+          <div style="text-align:center;font-weight:800;color:var(--accent1);" id="busIntervalVal">15 daqiqa</div>
+        </div>
+        <div>
+          <label>Kutish vaqtingiz (daqiqa)</label>
+          <input type="range" id="busWait" min="1" max="15" value="3" oninput="updateBus()">
+          <div style="text-align:center;font-weight:800;color:var(--accent3);" id="busWaitVal">3 daqiqa</div>
+        </div>
+      </div>
+      <div class="formula-box purple" id="busResult">P = 3/15 = 0.20 → 20%</div>
+    </div>
+  </div>
+
+</div>
+</section>
+
+<!-- ==================== BOB 3 ==================== -->
+<section id="bob3" class="section">
+<div class="container">
+  <div class="section-header">
+    <span class="tag">III - BOB</span>
+    <h2>Ehtimollarni Hisoblash</h2>
+    <p>Qo'shish, ko'paytirish teoremalari va to'la ehtimollik formulasi</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title">➕ Qo'shish Teoremasi</div>
+    <div class="grid-2">
+      <div>
+        <p style="font-size:14px;font-weight:700;color:var(--accent2);">Birgalikda bo'lmagan hodisalar:</p>
+        <div class="formula-box orange">P(A∪B) = P(A) + P(B)</div>
+        <p style="font-size:13px;color:var(--text2);">Agar A∩B = ∅ bo'lsa</p>
+      </div>
+      <div>
+        <p style="font-size:14px;font-weight:700;color:var(--accent1);">Umumiy holat:</p>
+        <div class="formula-box">P(A∪B) = P(A) + P(B) - P(A∩B)</div>
+        <p style="font-size:13px;color:var(--text2);">Kesishuvni ikki marta hisoblamaslik uchun</p>
+      </div>
+    </div>
+    <div class="demo-area" style="margin-top:16px;">
+      <div class="demo-title">Qo'shish kalkulyatori</div>
+      <div style="display:flex;gap:12px;align-items:flex-end;flex-wrap:wrap;">
+        <div><label>P(A)</label><input class="calc-input" type="number" id="addPA" min="0" max="1" step="0.01" value="0.3" oninput="calcAdd()"></div>
+        <div><label>P(B)</label><input class="calc-input" type="number" id="addPB" min="0" max="1" step="0.01" value="0.4" oninput="calcAdd()"></div>
+        <div><label>P(A∩B)</label><input class="calc-input" type="number" id="addPAB" min="0" max="1" step="0.01" value="0" oninput="calcAdd()"></div>
+      </div>
+      <div class="formula-box" style="margin-top:14px;" id="addResult">P(A∪B) = 0.3 + 0.4 - 0 = 0.70</div>
+    </div>
+  </div>
+
+  <div class="card green">
+    <div class="card-title">✖️ Ko'paytirish Teoremasi</div>
+    <p><span class="highlight green">Erkli (mustaqil) hodisalar</span> — birining ro'y berishi ikkinchisiga ta'sir qilmasa:</p>
+    <div class="formula-box green">P(A∩B) = P(A) × P(B)</div>
+    <div class="demo-area" style="margin-top:16px;">
+      <div class="demo-title">Ikkita tanga — Ikkala "gul" tushish</div>
+      <p style="font-size:14px;color:var(--text2);">Har bir tangada P(gul) = 1/2</p>
+      <div style="display:flex;gap:16px;margin:16px 0;flex-wrap:wrap;">
+        <div>
+          <div style="font-size:13px;color:var(--text2);margin-bottom:8px;">1-tanga natijasi</div>
+          <div style="display:flex;gap:8px;">
+            <div style="width:50px;height:50px;border-radius:50%;background:linear-gradient(135deg,#fbbf24,#f59e0b);display:flex;align-items:center;justify-content:center;font-weight:900;cursor:pointer;" onclick="setTanga1('G')">🌸</div>
+            <div style="width:50px;height:50px;border-radius:50%;background:linear-gradient(135deg,#94a3b8,#64748b);display:flex;align-items:center;justify-content:center;font-weight:900;color:white;cursor:pointer;" onclick="setTanga1('R')">1</div>
+          </div>
+          <div id="tanga1val" style="margin-top:6px;font-size:13px;color:var(--accent4);font-weight:700;"></div>
+        </div>
+        <div>
+          <div style="font-size:13px;color:var(--text2);margin-bottom:8px;">2-tanga natijasi</div>
+          <div style="display:flex;gap:8px;">
+            <div style="width:50px;height:50px;border-radius:50%;background:linear-gradient(135deg,#fbbf24,#f59e0b);display:flex;align-items:center;justify-content:center;font-weight:900;cursor:pointer;" onclick="setTanga2('G')">🌸</div>
+            <div style="width:50px;height:50px;border-radius:50%;background:linear-gradient(135deg,#94a3b8,#64748b);display:flex;align-items:center;justify-content:center;font-weight:900;color:white;cursor:pointer;" onclick="setTanga2('R')">1</div>
+          </div>
+          <div id="tanga2val" style="margin-top:6px;font-size:13px;color:var(--accent4);font-weight:700;"></div>
+        </div>
+      </div>
+      <div class="formula-box green" id="tangaResult">P(GG) = 1/2 × 1/2 = 1/4 = 0.25</div>
+      <div id="tangaMsg" style="margin-top:10px;font-weight:700;font-size:14px;"></div>
+    </div>
+  </div>
+
+  <div class="card orange">
+    <div class="card-title">🔴 Qarama-qarshi Hodisa Ehtimolligi</div>
+    <div class="formula-box orange">P(Ā) = 1 - P(A)</div>
+    <p>Murakkab masalalarda "kamida bitta" ni hisoblash uchun qulay!</p>
+    <div class="demo-area" style="margin-top:16px;">
+      <div class="demo-title">O'qchilar misoli — Kamida bitta tekkizish</div>
+      <div style="display:flex;gap:12px;align-items:flex-end;flex-wrap:wrap;">
+        <div>
+          <label>Har bir o'qchi tekkizish ehtimolligi</label>
+          <input type="range" id="okchiP" min="0.1" max="0.9" step="0.1" value="0.6" oninput="calcOkchi()">
+          <div style="text-align:center;font-weight:800;color:var(--accent2);" id="okchiPval">p = 0.6</div>
+        </div>
+        <div>
+          <label>O'qchilar soni</label>
+          <input type="range" id="okchiN" min="1" max="5" step="1" value="3" oninput="calcOkchi()">
+          <div style="text-align:center;font-weight:800;color:var(--accent2);" id="okchiNval">n = 3</div>
+        </div>
+      </div>
+      <div style="margin-top:14px;padding:16px;background:rgba(255,255,255,0.03);border-radius:10px;font-size:14px;color:var(--text2);" id="okchiCalc">
+        Hech biri tekkizmasligi: P(Ā) = (1-0.6)³ = 0.4³ = 0.064<br>
+        Kamida bittasi tekkizishi: P(A) = 1 - 0.064 = <strong style="color:var(--accent2)">0.936 = 93.6%</strong>
+      </div>
+    </div>
+  </div>
+
+  <div class="card purple">
+    <div class="card-title">🌳 To'la Ehtimollik Formulasi</div>
+    <div class="formula-box purple">P(A) = Σ P(Hᵢ) · P(A|Hᵢ)</div>
+    <p>H₁, H₂, ..., Hₙ — to'la hodisalar guruhi bo'lsa (bir-biriga zid va yig'indisi muqarrar hodisa)</p>
+    <div class="demo-area" style="margin-top:16px;">
+      <div class="demo-title">Ikkita quti — Oq shar chiqish</div>
+      <div class="grid-2">
+        <div style="background:rgba(56,189,248,0.06);border:1px solid rgba(56,189,248,0.2);border-radius:10px;padding:16px;">
+          <div style="font-weight:800;color:var(--accent1);margin-bottom:8px;">📦 1-quti</div>
+          <p style="font-size:13px;">3 ta oq + 2 ta qora shar</p>
+          <div style="margin-top:8px;font-family:'JetBrains Mono';font-size:13px;color:var(--accent4);">P(oq|H₁) = 3/5 = 0.6</div>
+        </div>
+        <div style="background:rgba(167,139,250,0.06);border:1px solid rgba(167,139,250,0.2);border-radius:10px;padding:16px;">
+          <div style="font-weight:800;color:var(--accent3);margin-bottom:8px;">📦 2-quti</div>
+          <p style="font-size:13px;">4 ta oq + 1 ta qora shar</p>
+          <div style="margin-top:8px;font-family:'JetBrains Mono';font-size:13px;color:var(--accent4);">P(oq|H₂) = 4/5 = 0.8</div>
+        </div>
+      </div>
+      <div style="margin-top:14px;padding:16px;background:rgba(255,255,255,0.03);border-radius:10px;font-size:14px;">
+        <div style="font-weight:700;color:var(--text2);margin-bottom:8px;">Hisoblash:</div>
+        P(H₁) = P(H₂) = 1/2 = 0.5 (tenglamalar bo'lgani uchun)<br><br>
+        P(oq) = P(H₁)·P(oq|H₁) + P(H₂)·P(oq|H₂)<br>
+        P(oq) = 0.5 × 0.6 + 0.5 × 0.8<br>
+        P(oq) = 0.3 + 0.4 = <strong style="color:var(--accent4)">0.7 = 70%</strong>
+      </div>
+    </div>
+  </div>
+
+</div>
+</section>
+
+<!-- ==================== AMALIY ==================== -->
+<section id="amaliy" class="section">
+<div class="container">
+  <div class="section-header">
+    <span class="tag">AMALIY MASHG'ULOT</span>
+    <h2>Sharlar Bilan O'yin</h2>
+    <p>MRT metodini qo'llab, qutidan shar oling va ehtimollikni hisoblang!</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🎱 Qutini sozlang</div>
+    <div style="display:flex;gap:16px;align-items:flex-end;flex-wrap:wrap;margin-bottom:20px;">
+      <div>
+        <label>🔴 Qizil sharlar</label>
+        <input type="range" id="redCount" min="1" max="10" value="5" oninput="updateBalls()">
+        <div style="text-align:center;font-weight:800;color:#ef4444;" id="redVal">5</div>
+      </div>
+      <div>
+        <label>🔵 Ko'k sharlar</label>
+        <input type="range" id="blueCount" min="1" max="10" value="3" oninput="updateBalls()">
+        <div style="text-align:center;font-weight:800;color:#3b82f6;" id="blueVal">3</div>
+      </div>
+    </div>
+    <div class="balls-container" id="ballsContainer"></div>
+    <div class="stat-row" style="margin-top:16px;">
+      <div class="stat"><div class="stat-val" id="totalBalls">8</div><div class="stat-label">Jami sharlar (n)</div></div>
+      <div class="stat"><div class="stat-val" style="color:#ef4444;" id="pRed">—</div><div class="stat-label">P(qizil) = m/n</div></div>
+      <div class="stat"><div class="stat-val" style="color:#3b82f6;" id="pBlue">—</div><div class="stat-label">P(ko'k) = m/n</div></div>
+    </div>
+    <button class="btn orange" style="margin-top:16px;" onclick="drawBall()">👆 Tasodifiy shar ol!</button>
+    <div id="drawResult" style="margin-top:14px;font-size:16px;font-weight:800;"></div>
+    <div class="stat-row" style="margin-top:12px;">
+      <div class="stat"><div class="stat-val" id="drawTotal">0</div><div class="stat-label">Jami olish</div></div>
+      <div class="stat"><div class="stat-val" style="color:#ef4444;" id="drawRed">0</div><div class="stat-label">Qizil tushdi</div></div>
+      <div class="stat"><div class="stat-val" style="color:#3b82f6;" id="drawBlue">0</div><div class="stat-label">Ko'k tushdi</div></div>
+    </div>
+    <div class="prob-bar-wrap" style="margin-top:12px;">
+      <div class="prob-bar-label"><span>Qizil shar nisbiy chastotasi</span><span id="redFreqBar">0%</span></div>
+      <div class="prob-bar-bg"><div class="prob-bar-fill" style="background:linear-gradient(90deg,#ef4444,#fca5a5);" id="redFreqFill" style="width:0%"></div></div>
+    </div>
+    <button class="btn" style="margin-top:12px;" onclick="resetDraw()">🔄 Qayta boshlash</button>
+  </div>
+
+  <!-- Ehtimollik kalkulyatori -->
+  <div class="card green">
+    <div class="card-title">🧮 Ehtimollik Kalkulyatori</div>
+    <p>Istalgan masalani hisoblash uchun foydalaning:</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0;">
+      <div>
+        <label>Qulay hollar soni (m)</label>
+        <input class="calc-input" type="number" id="calcM" min="0" value="3" oninput="calcProb()" style="width:100%">
+      </div>
+      <div>
+        <label>Jami hollar soni (n)</label>
+        <input class="calc-input" type="number" id="calcN" min="1" value="8" oninput="calcProb()" style="width:100%">
+      </div>
+    </div>
+    <div class="formula-box green" id="calcResult">P(A) = 3/8 = 0.375 = 37.5%</div>
+    <div class="prob-bar-wrap" style="margin-top:12px;">
+      <div class="prob-bar-label"><span>Ehtimollik</span><span id="calcBarLabel">37.5%</span></div>
+      <div class="prob-bar-bg"><div class="prob-bar-fill" style="background:linear-gradient(90deg,var(--accent4),#86efac);" id="calcBarFill" style="width:37.5%"></div></div>
+    </div>
+  </div>
+
+  <!-- Hayotiy masalalar -->
+  <div class="card orange">
+    <div class="card-title">🌍 Hayotiy Masalalar</div>
+    <div id="lifeProblem" style="margin-bottom:16px;"></div>
+    <button class="btn orange" onclick="nextLifeProblem()">➡️ Keyingi masala</button>
+    <div id="lifeAnswer" style="margin-top:14px;display:none;">
+      <div class="formula-box orange" id="lifeAnswerText"></div>
+    </div>
+    <button class="btn" style="margin-top:10px;" onclick="showLifeAnswer()">💡 Yechimni ko'rish</button>
+  </div>
+
+</div>
+</section>
+
+<!-- ==================== TEST ==================== -->
+<section id="test" class="section">
+<div class="container">
+  <div class="section-header">
+    <span class="tag">EKSPRESS TEST</span>
+    <h2>Bilimingizni Tekshiring</h2>
+    <p>10 ta savol · 15 daqiqa · Har bir to'g'ri javob = 1 ball</p>
+  </div>
+
+  <div id="testArea" class="card">
+    <div class="quiz-progress" id="quizProgress"></div>
+    <div id="quizContent"></div>
+  </div>
+</div>
+</section>
+
+<footer>
+  <p>📚 <strong>Ehtimollar Nazariyasi</strong> — Amaliy o'quv sayti</p>
+  <p style="margin-top:6px;">Mualliflar: Djalilova X.X. · Guliston shahri 8-UOTM · 2024</p>
+  <p style="margin-top:6px;font-size:12px;">Polya metodi · MRT metodi · EKSPRESS TEST tizimi</p>
+</footer>
+
+<script>
+// ========== NAVIGATION ==========
+function showSection(id, btn) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+  window.scrollTo({top: 0, behavior: 'smooth'});
+}
+
+// ========== DICE ==========
+const diceFaces = ['⚀','⚁','⚂','⚃','⚄','⚅'];
+let diceStats = {total:0, juft:0};
+function rollDice() {
+  const el = document.getElementById('diceEl');
+  el.classList.remove('rolling');
+  void el.offsetWidth;
+  el.classList.add('rolling');
+  const val = Math.floor(Math.random()*6)+1;
+  el.textContent = diceFaces[val-1];
+  diceStats.total++;
+  if(val%2===0) diceStats.juft++;
+  document.getElementById('diceResult').textContent = `${val} tushdi! ${val%2===0?'Juft ✅':'Toq ❌'}`;
+  document.getElementById('diceInfo').textContent = `Juft sonlar: 2, 4, 6 — Toq sonlar: 1, 3, 5`;
+  updateDiceStats();
+}
+function rollDice10() {
+  let i = 0;
+  const interval = setInterval(() => {
+    rollDice(); i++;
+    if(i>=10) clearInterval(interval);
+  }, 150);
+}
+function resetDice() {
+  diceStats = {total:0, juft:0};
+  document.getElementById('diceEl').textContent = '⚀';
+  document.getElementById('diceResult').textContent = 'Kubikni bosing!';
+  document.getElementById('diceInfo').textContent = '';
+  updateDiceStats();
+}
+function updateDiceStats() {
+  document.getElementById('diceTotal').textContent = diceStats.total;
+  document.getElementById('diceJuft').textContent = diceStats.juft;
+  const freq = diceStats.total>0 ? (diceStats.juft/diceStats.total) : 0;
+  document.getElementById('diceFreq').textContent = diceStats.total>0 ? (freq*100).toFixed(1)+'%' : '—';
+  document.getElementById('diceBar').textContent = diceStats.total>0 ? (freq*100).toFixed(1)+'%' : '0%';
+  document.getElementById('diceBarFill').style.width = (freq*100)+'%';
+}
+
+// ========== COIN ==========
+let coinStats = {total:0, gul:0, raqam:0};
+function flipCoin() {
+  const el = document.getElementById('coinEl');
+  el.classList.remove('flipping');
+  void el.offsetWidth;
+  el.classList.add('flipping');
+  const isGul = Math.random() < 0.5;
+  setTimeout(()=>{
+    if(isGul) {
+      el.className = 'coin gul'; el.innerHTML = '🌸<br><small>GUL</small>';
+      coinStats.gul++;
+    } else {
+      el.className = 'coin raqam'; el.innerHTML = '🔢<br><small>RAQAM</small>';
+      coinStats.raqam++;
+    }
+    coinStats.total++;
+    document.getElementById('coinResult').textContent = isGul ? '🌸 Gul tushdi!' : '🔢 Raqam tushdi!';
+    updateCoinStats();
+  }, 300);
+}
+function flipCoin20() {
+  let i = 0;
+  const interval = setInterval(() => {
+    flipCoin(); i++;
+    if(i>=20) clearInterval(interval);
+  }, 100);
+}
+function resetCoin() {
+  coinStats = {total:0, gul:0, raqam:0};
+  document.getElementById('coinEl').className = 'coin gul';
+  document.getElementById('coinEl').innerHTML = '🌸<br><small>GUL</small>';
+  document.getElementById('coinResult').textContent = 'Tangani bosing!';
+  updateCoinStats();
+}
+function updateCoinStats() {
+  document.getElementById('coinTotal').textContent = coinStats.total;
+  document.getElementById('coinGul').textContent = coinStats.gul;
+  document.getElementById('coinRaqam').textContent = coinStats.raqam;
+  const freq = coinStats.total>0 ? (coinStats.gul/coinStats.total) : 0;
+  document.getElementById('coinBar').textContent = coinStats.total>0 ? (freq*100).toFixed(1)+'%' : '0%';
+  document.getElementById('coinBarFill').style.width = (freq*100)+'%';
+}
+
+// ========== BUS ==========
+function updateBus() {
+  const iv = parseInt(document.getElementById('busInterval').value);
+  const wt = parseInt(document.getElementById('busWait').value);
+  document.getElementById('busIntervalVal').textContent = iv + ' daqiqa';
+  document.getElementById('busWaitVal').textContent = wt + ' daqiqa';
+  const p = wt/iv;
+  document.getElementById('busResult').textContent = `P = ${wt}/${iv} = ${p.toFixed(3)} → ${(p*100).toFixed(1)}%`;
+}
+
+// ========== ADD ==========
+function calcAdd() {
+  const pa = parseFloat(document.getElementById('addPA').value)||0;
+  const pb = parseFloat(document.getElementById('addPB').value)||0;
+  const pab = parseFloat(document.getElementById('addPAB').value)||0;
+  const res = pa + pb - pab;
+  document.getElementById('addResult').textContent = `P(A∪B) = ${pa} + ${pb} - ${pab} = ${res.toFixed(4)}`;
+}
+
+// ========== TANGA x2 ==========
+let t1 = null, t2 = null;
+function setTanga1(v) {
+  t1 = v;
+  document.getElementById('tanga1val').textContent = `Tanlandi: ${v==='G'?'🌸 Gul':'🔢 Raqam'}`;
+  updateTanga();
+}
+function setTanga2(v) {
+  t2 = v;
+  document.getElementById('tanga2val').textContent = `Tanlandi: ${v==='G'?'🌸 Gul':'🔢 Raqam'}`;
+  updateTanga();
+}
+function updateTanga() {
+  if(t1 && t2) {
+    const both = t1==='G' && t2==='G';
+    document.getElementById('tangaResult').textContent = `P(${t1+t2}) = 1/2 × 1/2 = 1/4 = 0.25`;
+    document.getElementById('tangaMsg').innerHTML = both ?
+      '<span style="color:var(--accent4)">✅ Ikkala tangada ham gul! P = 1/4 = 25%</span>' :
+      `<span style="color:var(--accent2)">${t1==='G'?'🌸':'🔢'} + ${t2==='G'?'🌸':'🔢'} — bu holat ham 1/4 ehtimollikda</span>`;
+  }
+}
+
+// ========== OKCHI ==========
+function calcOkchi() {
+  const p = parseFloat(document.getElementById('okchiP').value);
+  const n = parseInt(document.getElementById('okchiN').value);
+  document.getElementById('okchiPval').textContent = `p = ${p.toFixed(1)}`;
+  document.getElementById('okchiNval').textContent = `n = ${n}`;
+  const pNone = Math.pow(1-p, n);
+  const pAtLeast = 1 - pNone;
+  document.getElementById('okchiCalc').innerHTML = 
+    `Hech biri tekkizmasligi: P(Ā) = (1-${p.toFixed(1)})^${n} = ${(1-p).toFixed(1)}^${n} = ${pNone.toFixed(4)}<br><br>` +
+    `Kamida bittasi tekkizishi: P(A) = 1 - ${pNone.toFixed(4)} = <strong style="color:var(--accent2)">${pAtLeast.toFixed(4)} = ${(pAtLeast*100).toFixed(1)}%</strong>`;
+}
+
+// ========== BALLS ==========
+let ballStats = {total:0, red:0, blue:0};
+function updateBalls() {
+  const red = parseInt(document.getElementById('redCount').value);
+  const blue = parseInt(document.getElementById('blueCount').value);
+  document.getElementById('redVal').textContent = red;
+  document.getElementById('blueVal').textContent = blue;
+  const total = red+blue;
+  document.getElementById('totalBalls').textContent = total;
+  document.getElementById('pRed').textContent = `${red}/${total} = ${(red/total).toFixed(2)}`;
+  document.getElementById('pBlue').textContent = `${blue}/${total} = ${(blue/total).toFixed(2)}`;
+  const cont = document.getElementById('ballsContainer');
+  cont.innerHTML = '';
+  for(let i=0;i<red;i++){const b=document.createElement('div');b.className='ball red';b.textContent='Q';cont.appendChild(b);}
+  for(let i=0;i<blue;i++){const b=document.createElement('div');b.className='ball blue';b.textContent='K';cont.appendChild(b);}
+}
+function drawBall() {
+  const red = parseInt(document.getElementById('redCount').value);
+  const blue = parseInt(document.getElementById('blueCount').value);
+  const total = red+blue;
+  const isRed = Math.random() < red/total;
+  ballStats.total++;
+  if(isRed) ballStats.red++; else ballStats.blue++;
+  const res = document.getElementById('drawResult');
+  res.innerHTML = isRed ? '🔴 Qizil shar chiqdi!' : '🔵 Ko\'k shar chiqdi!';
+  res.style.color = isRed ? '#ef4444' : '#3b82f6';
+  document.getElementById('drawTotal').textContent = ballStats.total;
+  document.getElementById('drawRed').textContent = ballStats.red;
+  document.getElementById('drawBlue').textContent = ballStats.blue;
+  const freq = ballStats.total>0 ? ballStats.red/ballStats.total : 0;
+  document.getElementById('redFreqBar').textContent = (freq*100).toFixed(1)+'%';
+  document.getElementById('redFreqFill').style.width = (freq*100)+'%';
+}
+function resetDraw() {
+  ballStats = {total:0, red:0, blue:0};
+  document.getElementById('drawTotal').textContent = 0;
+  document.getElementById('drawRed').textContent = 0;
+  document.getElementById('drawBlue').textContent = 0;
+  document.getElementById('drawResult').textContent = '';
+  document.getElementById('redFreqBar').textContent = '0%';
+  document.getElementById('redFreqFill').style.width = '0%';
+}
+
+// ========== CALC ==========
+function calcProb() {
+  const m = parseInt(document.getElementById('calcM').value)||0;
+  const n = parseInt(document.getElementById('calcN').value)||1;
+  if(m > n) { document.getElementById('calcResult').textContent = '⚠️ m > n bo\'lishi mumkin emas!'; return; }
+  const p = m/n;
+  document.getElementById('calcResult').textContent = `P(A) = ${m}/${n} = ${p.toFixed(4)} = ${(p*100).toFixed(2)}%`;
+  document.getElementById('calcBarLabel').textContent = (p*100).toFixed(1)+'%';
+  document.getElementById('calcBarFill').style.width = (p*100)+'%';
+}
+
+// ========== LIFE PROBLEMS ==========
+const lifeProblems = [
+  {q:"Ekilgan 50 tup olma ko'chatidan 44 tupi ko'kargan. Ko'karish ehtimolligini toping.", a:"P(A) = m(A)/N = 44/50 = 0.88 → 88%"},
+  {q:"Yangi dori sinovida 500 bemordan 380 tasi tuzaldi. Keyingi bemor tuzalish ehtimolligi?", a:"P(A) = 380/500 = 0.76 → 76%"},
+  {q:"Zavodda lampalarning 5% nuqsonli. 100 ta lampadan bitta tasodifiy olinganda nuqsonli bo'lish ehtimolligi?", a:"P(nuqsonli) = 5/100 = 0.05 → 5%"},
+  {q:"Futbolchi penaltini 0.8 ehtimollik bilan kiritadi. 3 ta penaltida kamida 2 tasini kiritish ehtimolligi?", a:"P = C₃²×0.8²×0.2 + C₃³×0.8³ = 3×0.64×0.2 + 0.512 = 0.384 + 0.512 = 0.896 → 89.6%"},
+  {q:"[0;10] oraliqdan tasodifan tanlangan nuqtaning [3;6] oraliqqa tegishli bo'lish ehtimolligi?", a:"P = K/L = 3/10 = 0.3 → 30% (geometrik ehtimollik)"},
+];
+let lpIdx = 0;
+function nextLifeProblem() {
+  lpIdx = (lpIdx+1) % lifeProblems.length;
+  document.getElementById('lifeAnswer').style.display = 'none';
+  document.getElementById('lifeProblem').innerHTML = `<div style="font-size:15px;font-weight:700;line-height:1.6;">${lifeProblems[lpIdx].q}</div>`;
+}
+function showLifeAnswer() {
+  document.getElementById('lifeAnswerText').textContent = lifeProblems[lpIdx].a;
+  document.getElementById('lifeAnswer').style.display = 'block';
+}
+document.getElementById('lifeProblem').innerHTML = `<div style="font-size:15px;font-weight:700;line-height:1.6;">${lifeProblems[0].q}</div>`;
+
+// ========== QUIZ ==========
+const quizData = [
+  {q:"Kubikni tashlaganda 7 dan kichik son tushish qanday hodisa?", opts:["Tasodifiy","Muqarrar (aniq)","Mumkin bo'lmagan","Shartli"], ans:1, exp:"Kubikda 1,2,3,4,5,6 — barchasi 7 dan kichik. Shuning uchun bu muqarrar hodisa, P = 1."},
+  {q:"Qutida 8 ta oq va 12 ta qora shar. Oq shar olish ehtimolligi?", opts:["0.4","0.5","0.6","0.8"], ans:0, exp:"m = 8 (oq), n = 8+12 = 20. P = 8/20 = 0.4 = 40%."},
+  {q:"P(A) = 0.35 bo'lsa, P(Ā) = ?", opts:["0.35","0.65","1","0"], ans:1, exp:"P(Ā) = 1 - P(A) = 1 - 0.35 = 0.65."},
+  {q:"Ikkita mustaqil hodisa. P(A) = 0.5, P(B) = 0.6. P(A∩B) = ?", opts:["0.3","0.5","0.11","1.1"], ans:0, exp:"P(A∩B) = P(A)×P(B) = 0.5×0.6 = 0.3."},
+  {q:"P(A) = 0.3 va P(B) = 0.4. A va B birgalikda bo'lmasa, P(A∪B) = ?", opts:["0.7","0.1","0.12","1"], ans:0, exp:"Birgalikda bo'lmagan hodisalar: P(A∪B) = P(A)+P(B) = 0.3+0.4 = 0.7."},
+  {q:"Uchta o'qchi, har biri 0.8 ehtimollik bilan nishonga otadi. Kamida bittasi tekkizish ehtimolligi?", opts:["0.992","0.512","0.8","0.488"], ans:0, exp:"P(Ā) = (0.2)³ = 0.008. P(A) = 1 - 0.008 = 0.992 = 99.2%."},
+  {q:"Ikki tanga tashlaganda ikkala tangada 'gul' tushish ehtimolligi?", opts:["1/4","1/2","3/4","1"], ans:0, exp:"P = 1/2 × 1/2 = 1/4 = 0.25. Mustaqil hodisalar ko'paytmasi."},
+  {q:"[0;20] oraliqdan tasodifan tanlangan nuqtaning [5;10] oraliqqa tegishli bo'lish ehtimolligi?", opts:["0.25","0.5","0.3","0.1"], ans:0, exp:"Geometrik ehtimollik: P = 5/20 = 0.25 = 25%."},
+  {q:"Mumkin bo'lmagan hodisa ehtimolligi nechaga teng?", opts:["1","0.5","0","-1"], ans:2, exp:"P(∅) = 0 — mumkin bo'lmagan hodisa hech qachon ro'y bermaydi."},
+  {q:"Tanga 4 marta tashlaganda aynan 2 marta 'gul' tushish ehtimolligi?", opts:["1/4","3/8","1/2","5/8"], ans:1, exp:"C₄² × (1/2)² × (1/2)² = 6 × 1/16 = 6/16 = 3/8 = 0.375."},
+];
+
+let qIdx = 0, score = 0, answers = [];
+function initQuiz() {
+  qIdx = 0; score = 0; answers = new Array(quizData.length).fill(null);
+  renderQuestion();
+}
+function renderQuestion() {
+  if(qIdx >= quizData.length) { showResult(); return; }
+  const q = quizData[qIdx];
+  const prog = quizData.map((_,i) => {
+    let cls = 'qp-dot';
+    if(i < qIdx) cls += answers[i]===quizData[i].ans ? ' done' : ' wrong';
+    else if(i===qIdx) cls += ' current';
+    return `<div class="${cls}"></div>`;
+  }).join('');
+  document.getElementById('quizProgress').innerHTML = prog;
+  document.getElementById('quizContent').innerHTML = `
+    <div style="font-size:12px;color:var(--text2);font-weight:700;margin-bottom:14px;">${qIdx+1} / ${quizData.length} savol</div>
+    <div class="quiz-q">${q.q}</div>
+    <div class="quiz-options">
+      ${q.opts.map((o,i)=>`<button class="quiz-opt" onclick="answer(${i})">${String.fromCharCode(65+i)}) ${o}</button>`).join('')}
+    </div>
+  `;
+}
+function answer(i) {
+  const q = quizData[qIdx];
+  answers[qIdx] = i;
+  const opts = document.querySelectorAll('.quiz-opt');
+  opts.forEach(o => o.disabled = true);
+  opts[q.ans].classList.add('correct');
+  if(i !== q.ans) opts[i].classList.add('wrong');
+  else score++;
+  document.getElementById('quizContent').innerHTML += `
+    <div class="quiz-feedback ${i===q.ans?'correct':'wrong'}">${i===q.ans?'✅ To\'g\'ri!':'❌ Noto\'g\'ri!'} ${q.exp}</div>
+    <button class="btn ${i===q.ans?'green':'orange'}" onclick="${qIdx<quizData.length-1?'nextQ()':'showResult()'}">
+      ${qIdx<quizData.length-1?'➡️ Keyingi savol':'🏁 Natijani ko\'rish'}
+    </button>
+  `;
+}
+function nextQ() { qIdx++; renderQuestion(); }
+function showResult() {
+  const pct = Math.round(score/quizData.length*100);
+  const cls = pct>=80?'great':pct>=50?'ok':'bad';
+  const msg = pct>=80?'🏆 Zo\'r natija! Siz ehtimollar nazariyasini yaxshi o\'zlashtirdingiz!' :
+              pct>=50?'👍 Yaxshi! Bir oz ko\'proq mashq qiling.' :
+              '📚 Davom eting! Materiallarni qayta ko\'zdan kechiring.';
+  const prog = quizData.map((_,i) => `<div class="qp-dot ${answers[i]===quizData[i].ans?'done':'wrong'}"></div>`).join('');
+  document.getElementById('quizProgress').innerHTML = prog;
+  document.getElementById('quizContent').innerHTML = `
+    <div class="result-box">
+      <div class="result-score ${cls}">${score}/${quizData.length}</div>
+      <div style="font-size:20px;font-weight:800;margin:12px 0;">${pct}% to'g'ri</div>
+      <div style="font-size:15px;color:var(--text2);max-width:400px;margin:0 auto 24px;">${msg}</div>
+      <button class="btn green" onclick="initQuiz()">🔄 Qayta boshlash</button>
+    </div>
+  `;
+}
+initQuiz();
+
+// ========== INIT ==========
+updateBalls();
+calcProb();
+calcAdd();
+updateBus();
+calcOkchi();
+</script>
+</body>
+</html>
